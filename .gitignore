@@ -1,1 +1,4 @@
-/ActivityTracker.pyc
+# Exclude eclipse proect files
+/.project
+/.pydevproject
+/*.pyc
