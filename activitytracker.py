@@ -38,8 +38,8 @@ class Activity(object):
         Validate if the parameter is a list of dictionaries which describes all current opened windows on the active
         desktop. Each dictionary must contain mandatory keys: Title, Application, Active.
         
-        Raises ActivityException if window_list is not of type list or is not a list of dictionaries.
-        Raises ActivityException if dictionaries in window_list misses one of the mandatory keys.
+        Raises ActivityError if window_list is not of type list or is not a list of dictionaries.
+        Raises ActivityError if dictionaries in window_list misses one of the mandatory keys.
         
         :param window_list: A list of dictionary for validation. Empty list pass the validation.
         '''
@@ -54,13 +54,13 @@ class Activity(object):
                     for mandatory_key in mandatory_key_list:
                         if mandatory_key not in window.keys():
                             
-                            raise ActivityException(mandatory_key, 'ERROR: Mandatory key "{0}" expected for each dictionary in window list')
+                            raise ActivityError(mandatory_key, 'ERROR: Mandatory key "{0}" expected for each dictionary in window list')
                                         
                 else:
-                    raise ActivityException(0, "ERROR: A list of dictionaries was expected as parameter")
+                    raise ActivityError(0, "ERROR: A list of dictionaries was expected as parameter")
         
         else:
-            raise ActivityException(0, "ERROR: A list of dictionaries was expected as parameter")
+            raise ActivityError(0, "ERROR: A list of dictionaries was expected as parameter")
         
         return window_list
         
@@ -94,7 +94,7 @@ class SystemMonitor(object):
         #Check for an unused provider
         for key in self._providers:
             if key not in config:                
-                raise SystemMonitorException(key, 'WARNING: No configuration match provider "{0}"')
+                raise SystemMonitorError(key, 'WARNING: No configuration match provider "{0}"')
         
         
         result = {}
@@ -108,7 +108,7 @@ class SystemMonitor(object):
                     result[key] = self._providers[key]()
                 
                 else:
-                    raise SystemMonitorException(key, 'ERROR: Missing provider for configuration "{0}"')
+                    raise SystemMonitorError(key, 'ERROR: Missing provider for configuration "{0}"')
             else:
                 
                 result[key] = None
@@ -138,7 +138,7 @@ class ConfigurationManager(object):
 #                             EXCEPTIONS 
 #=======================================================================
 
-class TrackerException(Exception):
+class TrackerError(Exception):
     """
     Main class for Activity exceptions
     """
@@ -160,13 +160,13 @@ class TrackerException(Exception):
 
  
         
-class SystemMonitorException(TrackerException):
+class SystemMonitorError(TrackerError):
     '''
     Exceptions raised by SystemMonitor class
     '''
     
     
-class ActivityException(TrackerException):
+class ActivityError(TrackerError):
     '''
     Exceptions raised by Activity class
     '''

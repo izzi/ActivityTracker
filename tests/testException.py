@@ -4,7 +4,7 @@ Created on Aug 20, 2014
 @author: valeriu
 '''
 import unittest
-from ActivityTracker import ActivityException
+from ActivityTracker import ActivityError
 
 
 class TestException(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestException(unittest.TestCase):
 
     def testStringFormat(self):
         
-        exception = ActivityException(2, '{0}')
+        exception = ActivityError(2, '{0}')
 
         self.assertEqual('2', str(exception), "Incorect string formatting in exception")
         

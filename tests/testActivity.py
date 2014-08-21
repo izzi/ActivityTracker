@@ -6,7 +6,7 @@ Created on Aug 20, 2014
 
 import unittest
 from datetime import datetime, timedelta
-from ActivityTracker import Activity, ActivityException
+from ActivityTracker import Activity, ActivityError
 
 class TestActivity(unittest.TestCase):
 
@@ -24,19 +24,19 @@ class TestActivity(unittest.TestCase):
         
         
     def testConstructorParameterValidation(self):
-        self.assertRaises(ActivityException, Activity, [{}])
+        self.assertRaises(ActivityError, Activity, [{}])
         
       
     def testValidateListParameter(self):
-        self.assertRaises(ActivityException, self.activity.validateWindows, 3)  
+        self.assertRaises(ActivityError, self.activity.validateWindows, 3)  
         
         
     def testValidateListDictionaryParameter(self):
-        self.assertRaises(ActivityException, self.activity.validateWindows, [3]) 
+        self.assertRaises(ActivityError, self.activity.validateWindows, [3]) 
         
         
     def testValidateListDictionaryKeys(self):
-        self.assertRaises(ActivityException, self.activity.validateWindows, [{}]) 
+        self.assertRaises(ActivityError, self.activity.validateWindows, [{}]) 
     
     
     def testConstructorStartTime(self):
