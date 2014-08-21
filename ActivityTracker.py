@@ -6,15 +6,18 @@ Created on Aug 20, 2014
 
 class Activity(object):
     '''
-    classdocs
+    Describe current state of the active desktop: for each opened windows will store window title, parent application,
+    system time where this state was detected and a recorded duration of this state. Any change of the active window
+    title or a switch between active windows will mark a transition to a different state.
     '''
 
-    def __init__(self, config = None, monitor = None):
+    def __init__(self, windows):
         '''
-        Constructor
+        Saves all opened windows received by parameter and current system time
+        
+        :param windows: A list of dictionary, where each dictionary describe a opened window
         '''
-        self._config = config
-        self._monitor = monitor
+        self._windows = windows
         
         
 class SystemMonitor(object):
