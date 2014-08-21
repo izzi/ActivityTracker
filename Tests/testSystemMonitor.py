@@ -6,7 +6,7 @@ Created on Aug 20, 2014
 import unittest
 import random
 
-from ActivityTracker import SystemMonitor, MissingProviderException, UnusedProviderException
+from ActivityTracker import SystemMonitor, SystemMonitorException
 
 class TestSystemMonitor(unittest.TestCase):    
      
@@ -62,7 +62,7 @@ class TestSystemMonitor(unittest.TestCase):
             #Set a invalid configuration without a matching provider
             self.config["WrongConfigTest"] = True
         
-            self.assertRaises(MissingProviderException, self.monitor, self.config)
+            self.assertRaises(SystemMonitorException, self.monitor, self.config)
             
             
         def testProviderHasNoConfig(self):
@@ -72,7 +72,7 @@ class TestSystemMonitor(unittest.TestCase):
             
             self.monitor = SystemMonitor(self.providers)
         
-            self.assertRaises(UnusedProviderException, self.monitor, self.config)
+            self.assertRaises(SystemMonitorException, self.monitor, self.config)
             
 #TODO: Test each provider
 #TODO: Test values of each provider

@@ -15,38 +15,41 @@ class Activity(object):
         '''
         Saves all opened windows received by parameter and current system time
         
-        :param windows: A list of dictionary, where each dictionary describe a opened window
+        :param window_list: A list of dictionary, where each dictionary describe a opened window
         '''
         self._window_list = self.validateWindows(window_list)
         
         
-    def validateWindows(self, windows_list):
+    def validateWindows(self, window_list):
         '''
         Validate if the parameter is a list of dictionaries which describes all current opened windows on the active
         desktop. Each dictionary must contain mandatory keys: Title, Application, Active.
         
-        :param windows: A list of dictionary for validation. Empty list pass the validation.
+        Raises ActivityException if window_list is not of type list or is not a list of dictionaries.
+        Raises ActivityException if dictionaries in window_list misses one of the mandatory keys.
+        
+        :param window_list: A list of dictionary for validation. Empty list pass the validation.
         '''
         mandatory_key_list = ["Title", "Application", "Active"]
         
-        if type(windows_list) is list:
+        if type(window_list) is list:
             
-            for window in windows_list:
+            for window in window_list:
                 
                 if type(window) is dict:
                     # Check for mandatory keys
                     for mandatory_key in mandatory_key_list:
                         if mandatory_key not in window.keys():
                             
-                            raise MissingMandatoryKeyException(mandatory_key, 'ERROR: Mandatory key "{0}" expected for each dictionary in window list')
+                            raise ActivityException(mandatory_key, 'ERROR: Mandatory key "{0}" expected for each dictionary in window list')
                                         
                 else:
-                    raise ParamaterDictionaryListException(0, "ERROR: A list of dictionaries was expected as parameter")
+                    raise ActivityException(0, "ERROR: A list of dictionaries was expected as parameter")
         
         else:
-            raise ParamaterDictionaryListException(0, "ERROR: A list of dictionaries was expected as parameter")
+            raise ActivityException(0, "ERROR: A list of dictionaries was expected as parameter")
         
-        return windows_list
+        return window_list
         
         
         
@@ -78,7 +81,7 @@ class SystemMonitor(object):
         #Check for an unused provider
         for key in self._providers:
             if key not in config:                
-                raise UnusedProviderException(key, 'WARNING: No configuration match provider "{0}"')
+                raise SystemMonitorException(key, 'WARNING: No configuration match provider "{0}"')
         
         
         result = {}
@@ -92,7 +95,7 @@ class SystemMonitor(object):
                     result[key] = self._providers[key]()
                 
                 else:
-                    raise MissingProviderException(key, 'ERROR: Missing provider for configuration "{0}"')
+                    raise SystemMonitorException(key, 'ERROR: Missing provider for configuration "{0}"')
             else:
                 
                 result[key] = None
@@ -105,7 +108,7 @@ class SystemMonitor(object):
 #                             EXCEPTIONS 
 #=======================================================================
 
-class ActivityException(Exception):
+class TrackerException(Exception):
     """
     Main class for Activity exceptions
     """
@@ -127,26 +130,13 @@ class ActivityException(Exception):
 
  
         
-class MissingProviderException(ActivityException):
+class SystemMonitorException(TrackerException):
     '''
-    There is no provider in SystemMonitor to match the configuration 
-    '''
-    
-    
-class UnusedProviderException(ActivityException):
-    '''
-    There is no configuration match for this provider
-    '''
-
-
-class MissingMandatoryKeyException(ActivityException):
-    '''
-    Dictionary must contain a mandatory key
-    '''
-
-    
-class ParamaterDictionaryListException(ActivityException):
-    '''
-    Parameter must be of type list and contain only dictionaries
+    Exceptions raised by SystemMonitor class
     '''
     
+    
+class ActivityException(TrackerException):
+    '''
+    Exceptions raised by Activity class
+    '''
