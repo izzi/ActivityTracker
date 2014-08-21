@@ -11,13 +11,44 @@ class Activity(object):
     title or a switch between active windows will mark a transition to a different state.
     '''
 
-    def __init__(self, windows):
+    def __init__(self, window_list):
         '''
         Saves all opened windows received by parameter and current system time
         
         :param windows: A list of dictionary, where each dictionary describe a opened window
         '''
-        self._windows = windows
+        self._window_list = self.validateWindows(window_list)
+        
+        
+    def validateWindows(self, windows_list):
+        '''
+        Validate if the parameter is a list of dictionaries which describes all current opened windows on the active
+        desktop. Each dictionary must contain mandatory keys: Title, Application, Active.
+        
+        :param windows: A list of dictionary for validation. Empty list pass the validation.
+        '''
+        mandatory_key_list = ["Title", "Application", "Active"]
+        
+        if type(windows_list) is list:
+            
+            for window in windows_list:
+                
+                if type(window) is dict:
+                    # Check for mandatory keys
+                    for mandatory_key in mandatory_key_list:
+                        if mandatory_key not in window.keys():
+                            
+                            raise MissingMandatoryKeyException(mandatory_key, 'ERROR: Mandatory key "{0}" expected for each dictionary in window list')
+                                        
+                else:
+                    raise ParamaterDictionaryListException(0, "ERROR: A list of dictionaries was expected as parameter")
+        
+        else:
+            raise ParamaterDictionaryListException(0, "ERROR: A list of dictionaries was expected as parameter")
+        
+        return windows_list
+        
+        
         
         
 class SystemMonitor(object):
@@ -38,8 +69,8 @@ class SystemMonitor(object):
         '''
         For each enabled configuration call the respective provider to obtain the current system state.
         
-        Raises MissingProvider if there is no provider to match the enabled configuration.
-        Raises UnusedProvider if one of the initiated provider do not match any configuration.
+        Raises MissingProviderException if there is no provider to match the enabled configuration.
+        Raises UnusedProviderException if one of the initiated provider do not match any configuration.
         
         :param config: A dictionary of parameters that must be retrieved from system. A false key disable the parameter.
         '''
@@ -47,7 +78,7 @@ class SystemMonitor(object):
         #Check for an unused provider
         for key in self._providers:
             if key not in config:                
-                raise UnusedProvider(key, 'WARNING: No configuration match provider "{0}"')
+                raise UnusedProviderException(key, 'WARNING: No configuration match provider "{0}"')
         
         
         result = {}
@@ -61,14 +92,19 @@ class SystemMonitor(object):
                     result[key] = self._providers[key]()
                 
                 else:
-                    raise MissingProvider(key, 'ERROR: Missing provider for configuration "{0}"')
+                    raise MissingProviderException(key, 'ERROR: Missing provider for configuration "{0}"')
             else:
                 
                 result[key] = None
             
         return result
+  
     
-    
+
+#=======================================================================
+#                             EXCEPTIONS 
+#=======================================================================
+
 class ActivityException(Exception):
     """
     Main class for Activity exceptions
@@ -87,16 +123,30 @@ class ActivityException(Exception):
     
     def __str__(self):
         return self._message.format(self._value)
-           
+
+
+ 
         
-class MissingProvider(ActivityException):
+class MissingProviderException(ActivityException):
     '''
     There is no provider in SystemMonitor to match the configuration 
     '''
     
     
-class UnusedProvider(ActivityException):
+class UnusedProviderException(ActivityException):
     '''
     There is no configuration match for this provider
+    '''
+
+
+class MissingMandatoryKeyException(ActivityException):
+    '''
+    Dictionary must contain a mandatory key
+    '''
+
+    
+class ParamaterDictionaryListException(ActivityException):
+    '''
+    Parameter must be of type list and contain only dictionaries
     '''
     
