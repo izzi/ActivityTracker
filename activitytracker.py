@@ -115,6 +115,23 @@ class SystemMonitor(object):
             
         return result
   
+
+
+class ConfigurationManager(object):
+    '''
+    Utility to manage configuration files
+    '''
+    
+    def __init__(self, defaultConfig):
+        '''
+        
+        :param default_config:
+        '''
+        self._default_config = defaultConfig
+        
+        
+    def loadConfiguration(self):
+        pass
     
 
 #=======================================================================
