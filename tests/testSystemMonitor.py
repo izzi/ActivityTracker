@@ -73,10 +73,16 @@ class TestSystemMonitor(unittest.TestCase):
             self.monitor = SystemMonitor(self.providers)
         
             self.assertRaises(SystemMonitorException, self.monitor, self.config)
+
             
 #TODO: Test each provider
 #TODO: Test values of each provider
-
+#TODO: System status: Unchanged, NewActivity, Idle
+#TODO: Activity creation
+#TODO: Activity to string
+#TODO: Ncurses library for terminal display
+#TODO: Configuration Manager
+#TODO: Database backend
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
