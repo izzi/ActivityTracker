@@ -4,6 +4,8 @@ Created on Aug 20, 2014
 @author: valeriu
 '''
 
+from datetime import datetime
+
 class Activity(object):
     '''
     Describe current state of the active desktop: for each opened windows will store window title, parent application,
@@ -18,6 +20,17 @@ class Activity(object):
         :param window_list: A list of dictionary, where each dictionary describe a opened window
         '''
         self._window_list = self.validateWindows(window_list)
+        self._startTime = datetime.now()
+        self._duration = 0
+       
+        
+    def incrementDuration(self, amount = 1):
+        '''
+        Increment duration of the current activity by amount seconds
+        
+        :param amount: Number of seconds by which the duration is incremented
+        '''
+        self._duration = self._duration + amount
         
         
     def validateWindows(self, window_list):

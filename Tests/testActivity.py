@@ -3,7 +3,9 @@ Created on Aug 20, 2014
 
 @author: valeriu
 '''
+
 import unittest
+from datetime import datetime, timedelta
 from ActivityTracker import Activity, ActivityException
 
 class TestActivity(unittest.TestCase):
@@ -38,19 +40,22 @@ class TestActivity(unittest.TestCase):
     
     
     def testConstructorStartTime(self):
-        pass
+        self.assertGreater (self.activity._startTime, datetime.now() - timedelta(seconds=1), "startTime in constructor not initialized wit current time")
+        self.assertLess    (self.activity._startTime, datetime.now() + timedelta(seconds=1), "startTime in constructor not initialized wit current time")
     
     
     def testConstructorDefaultDuration(self):
-        pass
+        self.assertEqual(self.activity._duration, 0, "Default duration in constructor must be 0")
     
     
     def testIncrementDurationParam(self):
-        pass
+        self.activity.incrementDuration(2)
+        self.assertEqual(self.activity._duration, 2, "Function ignore parameter value")
     
     
     def testIncrementDurationDefaultParam(self):
-        pass
+        self.activity.incrementDuration()
+        self.assertEqual(self.activity._duration, 1, "Default increment must be 1")
    
 
 if __name__ == "__main__":
