@@ -6,11 +6,11 @@ Created on Aug 20, 2014
 import unittest
 import random
 
-from ActivityTracker import SystemMonitor, SystemMonitorError
+from activitytracker import SystemMonitor, SystemMonitorError
 
 class TestSystemMonitor(unittest.TestCase):    
      
-        def provideTrue(self):
+        def provide_true(self):
             
             return True
         
@@ -19,7 +19,7 @@ class TestSystemMonitor(unittest.TestCase):
             
             self.allowedFields = ["BootTime", "NetworkUpload", "NetworkDownload", "Memory", "CPU", "StartTime", "ActiveWindow", "Window"]          
             self.config = {label: True for label in self.allowedFields}
-            self.providers = {label: self.provideTrue for label in self.allowedFields}
+            self.providers = {label: self.provide_true for label in self.allowedFields}
             self.monitor = SystemMonitor(self.providers)
             
         
@@ -31,24 +31,24 @@ class TestSystemMonitor(unittest.TestCase):
             self.monitor = None
             
             
-        def testProvidersSetup(self):
+        def test_providers_setup(self):
             
             self.assertDictEqual(self.providers, self.monitor._providers, "Assigned providers do not match")
         
         
-        def testConfigAllDisabled(self):
+        def test_config_all_disabled(self):
             
             self.config = {label: None for label in self.allowedFields}
             
             self.assertDictEqual(self.monitor(self.config), self.config, "Some providers ignore provided configuration")
         
         
-        def testConfigAllEnabled(self):
+        def test_config_all_enabled(self):
         
             self.assertDictEqual(self.monitor(self.config), self.config, "Some providers do not run")
             
         
-        def testConfigMixed(self):
+        def test_config_mixed(self):
             """
             Enables all fields in configuration, after that disable a random one
             """
@@ -57,7 +57,7 @@ class TestSystemMonitor(unittest.TestCase):
             self.assertDictEqual(self.monitor(self.config), self.config, "Some providers ignore configuration")
             
         
-        def testConfigHasNoProvider(self):
+        def test_config_has_no_provider(self):
             
             #Set a invalid configuration without a matching provider
             self.config["WrongConfigTest"] = True
@@ -65,10 +65,10 @@ class TestSystemMonitor(unittest.TestCase):
             self.assertRaises(SystemMonitorError, self.monitor, self.config)
             
             
-        def testProviderHasNoConfig(self):
+        def test_provider_has_no_config(self):
             
             #Set a invalid provider without a matching configuration
-            self.providers["WrongProviderTest"] = self.provideTrue
+            self.providers["WrongProviderTest"] = self.provide_true
             
             self.monitor = SystemMonitor(self.providers)
         

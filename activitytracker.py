@@ -19,12 +19,12 @@ class Activity(object):
         
         :param window_list: A list of dictionary, where each dictionary describe a opened window
         '''
-        self._window_list = self.validateWindows(window_list)
-        self._startTime = datetime.now()
+        self._window_list = self.validate_windows(window_list)
+        self._start_time = datetime.now()
         self._duration = 0
        
         
-    def incrementDuration(self, amount = 1):
+    def increment_duration(self, amount = 1):
         '''
         Increment duration of the current activity by amount seconds
         
@@ -33,7 +33,7 @@ class Activity(object):
         self._duration = self._duration + amount
         
         
-    def validateWindows(self, window_list):
+    def validate_windows(self, window_list):
         '''
         Validate if the parameter is a list of dictionaries which describes all current opened windows on the active
         desktop. Each dictionary must contain mandatory keys: Title, Application, Active.
@@ -122,15 +122,15 @@ class ConfigurationManager(object):
     Utility to manage configuration files
     '''
     
-    def __init__(self, defaultConfig):
+    def __init__(self, default_config):
         '''
         
         :param default_config:
         '''
-        self._default_config = defaultConfig
+        self._default_config = default_config
         
         
-    def loadConfiguration(self):
+    def load_configuration(self):
         pass
     
 

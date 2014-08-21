@@ -4,7 +4,7 @@ Created on Aug 20, 2014
 @author: valeriu
 '''
 import unittest
-from ActivityTracker import ActivityError
+from activitytracker import ActivityError
 
 
 class TestException(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestException(unittest.TestCase):
         pass
 
 
-    def testStringFormat(self):
+    def test_string_format(self):
         
         exception = ActivityError(2, '{0}')
 
